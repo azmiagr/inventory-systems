@@ -7,15 +7,20 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::table('suppliers', function (Blueprint $table) {
-            $table->string('slug')->unique()->after('name');
-        });
+        if (!Schema::hasColumn('suppliers', 'slug')) {
+            Schema::table('suppliers', function (Blueprint $table) {
+                $table->string('slug')->unique()->after('name');
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('suppliers', function (Blueprint $table) {
-            $table->dropColumn('slug');
-        });
+        if (Schema::hasColumn('suppliers', 'slug')) {
+            Schema::table('suppliers', function (Blueprint $table) {
+                $table->dropUnique(['slug']);
+                $table->dropColumn('slug');
+            });
+        }
     }
 };

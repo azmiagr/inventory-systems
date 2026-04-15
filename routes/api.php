@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ItemController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Responses\ApiResponse;
 use Illuminate\Http\Request;
@@ -21,6 +22,8 @@ Route::prefix('v1')->group(function () {
         Route::get('/suppliers', [SupplierController::class, 'index']);
         Route::get('/suppliers/{supplier}', [SupplierController::class, 'show']);
 
+        Route::get('/items', [ItemController::class, 'index']);
+        Route::get('/items/{item}', [ItemController::class, 'show']);
 
         Route::middleware('role:admin,staff')->group(function () {
             Route::post('/categories', [CategoryController::class, 'store']);
@@ -32,6 +35,10 @@ Route::prefix('v1')->group(function () {
             Route::post('/suppliers', [SupplierController::class, 'store']);
             Route::put('/suppliers/{supplier}', [SupplierController::class, 'update']);
             Route::delete('/suppliers/{supplier}', [SupplierController::class, 'destroy']);
+
+            Route::post('/items', [ItemController::class, 'store']);
+            Route::put('/items/{item}', [ItemController::class, 'update']);
+            Route::delete('/items/{item}', [ItemController::class, 'destroy']);
         });
 
         Route::middleware('role:admin')->group(function () {
