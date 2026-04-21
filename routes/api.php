@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ItemController;
+use App\Http\Controllers\Api\StockTransactionController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Responses\ApiResponse;
 use Illuminate\Http\Request;
@@ -25,10 +26,18 @@ Route::prefix('v1')->group(function () {
         Route::get('/items', [ItemController::class, 'index']);
         Route::get('/items/{item}', [ItemController::class, 'show']);
 
+        Route::get('/transactions', [StockTransactionController::class, 'index']);
+        Route::get('/transactions/{transaction}', [StockTransactionController::class, 'show']);
+
+
         Route::middleware('role:admin,staff')->group(function () {
             Route::post('/categories', [CategoryController::class, 'store']);
             Route::put('/categories/{category}', [CategoryController::class, 'update']);
             Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
+
+            Route::post('/transactions', [StockTransactionController::class, 'store']);
+            Route::delete('/transactions/{transaction}', [StockTransactionController::class, 'destroy']);
+
         });
 
         Route::middleware('role:admin')->group(function () {
@@ -39,6 +48,10 @@ Route::prefix('v1')->group(function () {
             Route::post('/items', [ItemController::class, 'store']);
             Route::put('/items/{item}', [ItemController::class, 'update']);
             Route::delete('/items/{item}', [ItemController::class, 'destroy']);
+
+            Route::patch('/transactions/{transaction}/approve', [StockTransactionController::class, 'approve']);
+            Route::patch('/transactions/{transaction}/reject', [StockTransactionController::class, 'reject']);
+
         });
 
         Route::middleware('role:admin')->group(function () {
